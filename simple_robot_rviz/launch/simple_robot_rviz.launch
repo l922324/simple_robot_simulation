@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<launch>
+
+  <!-- rviz -->
+  <arg name="rviz"    default="true" />
+  <arg name="rviz_file" default="$(find simple_robot_rviz)/rviz/simple_robot.rviz" />
+  <node pkg="rviz" type="rviz" name="$(anon rviz)" args="-d $(arg rviz_file)" output="screen" if="$(arg rviz)"/>
+
+</launch>

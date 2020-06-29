@@ -1,0 +1,219 @@
+<?xml version="1.0"?>
+<robot name="simple_robot">
+
+<link name="chasis">
+<inertial>
+	<origin rpy="0 0 0" xyz="0 0 0.1"/>
+	<mass value="1.0"/>
+	<inertia ixx="0.0741666666667" ixy="0.0" ixz="0.0" iyy="0.0585416666667" iyz="0.0" izz="0.0260416666667"/>
+</inertial>
+<visual>
+	<origin rpy="0 0 0" xyz="0 0 0.1"/>
+	<geometry>
+		<box size="0.4 0.2 0.1"/>
+	</geometry>
+	<material name="black"/>
+</visual>
+<collision>
+	<origin rpy="0 0 0" xyz="0 0 0.1"/>
+	<geometry>
+		<box size="0.4 0.2 0.1"/>
+	</geometry>
+</collision>
+
+</link>
+
+<link name="caster">
+<inertial>
+	<origin rpy="0 0 0" xyz="0.15 0 0.05"/>
+	<mass value="0.0655"/>
+	<inertia ixx="0.0000655" ixy="0.0" ixz="0.0" iyy="0.0000655" iyz="0.0" izz="0.0000655"/>
+</inertial>
+<visual>
+	<origin rpy="0 0 0" xyz="0.15 0 0.05"/>
+	<geometry>
+		<sphere radius="0.05"/>
+	</geometry>
+	<material name="orange"/>
+</visual>
+<collision>
+	<origin rpy="0 0 0" xyz="0.15 0 0.05"/>
+	<geometry>
+		<sphere radius="0.05"/>
+	</geometry>
+	<surface>
+		<friction>
+			<ode>
+				<mu>0</mu>
+				<mu2>0</mu2>
+				<slip1>1.0</slip1>
+				<slip2>1.0</slip2>
+			</ode>
+		</friction>
+	</surface>
+</collision>
+
+</link>
+
+<joint name="caster_to_chasis" type="fixed">
+	<parent link="chasis"/>
+	<child link="caster"/>
+</joint>
+
+
+<link name="right_wheel">
+<inertial>
+	<origin rpy="1.5707 0 0" xyz="0 0 0"/>
+	<mass value="0.19625"/>
+	<inertia ixx="0.00053151041" ixy="0.0" ixz="0.0" iyy="0.00053151041" iyz="0.0" izz="0.00098125"/>
+</inertial>
+<visual>
+	<origin rpy="1.5707 0 0" xyz="0 0 0"/>
+	<geometry>
+		<cylinder length="0.05" radius="0.1"/>
+	</geometry>
+	<material name="blue"/>
+</visual>
+<collision>
+	<origin rpy="1.5707 0 0" xyz="0 0 0"/>
+	<geometry>
+		<cylinder length="0.05" radius="0.1"/>
+	</geometry>
+</collision>
+
+</link>
+
+<joint name="right_wheel_to_chasis" type="continuous">
+	<axis xyz="0 1 0"/>
+	<parent link="chasis"/>
+	<child link="left_wheel"/>
+	<origin xyz="-0.1 -0.13 0.1"/>
+	<inertial>
+		<mass value="0.19625"/>
+		<inertia ixx="0.00053151041" ixy="0.0" ixz="0.0" iyy="0.00053151041" iyz="0.0" izz="0.00098125"/>
+	</inertial>
+</joint>
+
+<link name="left_wheel">
+<inertial>
+	<origin rpy="-1.5707 0 0" xyz="0 0 0"/>
+	<mass value="0.19625"/>
+	<inertia ixx="0.00053151041" ixy="0.0" ixz="0.0" iyy="0.00053151041" iyz="0.0" izz="0.00098125"/>
+</inertial>
+<visual>
+	<origin rpy="-1.5707 0 0" xyz="0 0 0"/>
+	<geometry>
+		<cylinder length="0.05" radius="0.1"/>
+	</geometry>
+	<material name="blue"/>
+</visual>
+<collision>
+	<origin rpy="-1.5707 0 0" xyz="0 0 0"/>
+	<geometry>
+		<cylinder length="0.05" radius="0.1"/>
+	</geometry>
+</collision>
+
+</link>
+
+<joint name="left_wheel_to_chasis" type="continuous">
+	<axis xyz="0 1 0"/>
+	<parent link="chasis"/>
+	<child link="right_wheel"/>
+	<origin xyz="-0.1 0.13 0.1"/>
+	<inertial>
+		<mass value="0.19625"/>
+		<inertia ixx="0.00053151041" ixy="0.0" ixz="0.0" iyy="0.00053151041" iyz="0.0" izz="0.00098125"/>
+	</inertial>
+</joint>
+
+<!--Differential Drive-->
+<gazebo>
+	<plugin name="differential_drive_controller" filename="libgazebo_ros_diff_drive.so">
+		<alwaysOn>true</alwaysOn>
+		<updateRate>20</updateRate>
+		<leftJoint>left_wheel_to_chasis</leftJoint>
+		<rightJoint>right_wheel_to_chasis</rightJoint>
+		<wheelSeparation>0.26</wheelSeparation>
+		<wheelDiameter>0.2</wheelDiameter>
+		<torque>20</torque>
+		<commandTopic>cmd_vel</commandTopic>
+		<odometryTopic>odom</odometryTopic>
+		<odometryFrame>odom</odometryFrame>
+		<robotBaseFrame>chasis</robotBaseFrame>
+		<legacyMode>true</legacyMode>
+	</plugin>
+</gazebo>
+
+<joint name="hokuyo_joint" type="fixed">
+	<axis xyz="0 1 0" />
+	<origin xyz="0.15 0 0.2" rpy="0 0 0"/>
+	<parent link="chasis"/>
+	<child link="hokuyo_link"/>
+	<inertial>
+		<mass value="1.0"/>
+		<inertia ixx="5.1458e-5" iyy="5.1458e-5" izz="5.1458e-5" ixy="0" ixz="0" iyz="0"/>
+	</inertial>
+</joint>
+
+<!-- Hokuyo Laser -->
+<link name="hokuyo_link">
+	<collision>
+		<origin xyz="0 0 0" rpy="0 0 0"/>
+		<geometry>
+			<box size="0.1 0.1 0.1"/>
+		</geometry>
+	</collision>
+
+	<visual>
+		<origin xyz="0 0 0" rpy="0 0 0"/>
+		<geometry>
+			<mesh filename="package://simple_robot_description/meshes/hokuyo.dae"/>
+		</geometry>
+	</visual>
+
+	<inertial>
+		<mass value="1e-5" />
+		<origin xyz="0 0 0" rpy="0 0 0"/>
+		<inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+	</inertial>
+</link>
+
+<!-- hokuyo -->
+<gazebo reference="hokuyo_link">
+	<sensor type="ray" name="head_hokuyo_sensor">
+	<pose>0 0 0 0 0 0</pose>
+	<visualize>true</visualize>
+	<update_rate>40</update_rate>
+	<ray>
+		<scan>
+			<horizontal>
+				<samples>720</samples>
+				<resolution>1</resolution>
+				<min_angle>-1.570796</min_angle>
+				<max_angle>1.570796</max_angle>
+			</horizontal>
+		</scan>
+		<range>
+			<min>0.10</min>
+			<max>30.0</max>
+			<resolution>0.01</resolution>
+		</range>
+		<noise>
+			<type>gaussian</type>
+			<!-- Noise parameters based on published spec for Hokuyo laser
+			achieving "+-30mm" accuracy at range < 10m.  A mean of 0.0m and
+			stddev of 0.01m will put 99.7% of samples within 0.03m of the true
+			reading. -->
+			<mean>0.0</mean>
+			<stddev>0.01</stddev>
+		</noise>
+	</ray>
+	<plugin name="gazebo_ros_head_hokuyo_controller" filename="libgazebo_ros_laser.so">
+		<topicName>/laser/scan</topicName>
+		<frameName>hokuyo_link</frameName>
+	</plugin>
+	</sensor>
+</gazebo>
+
+</robot>
