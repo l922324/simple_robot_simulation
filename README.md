@@ -63,7 +63,7 @@ sudo apt-get install ros-kinetic-desktop-full
 ```
 Gazebo7.x and RVIZ will be installed automatically, tested the program can also work with Gazebo7.x, hence Gazebo10 is not necessary to be installed.
 
-2. If Gazebo7.x has problem of opening on its own or showing error “VMware: vmw_ioctl_command error Invalid argument.”, might be problem of VMware, run 
+2. If Gazebo7.x has problem of opening on its own or showing error `VMware: vmw_ioctl_command error Invalid argument.`, might be problem of VMware, run 
 ```
 export SVGA_VGPU10=0 
 ```
