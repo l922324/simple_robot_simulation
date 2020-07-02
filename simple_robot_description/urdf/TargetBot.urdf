@@ -213,7 +213,7 @@
 <gazebo reference="rplidar_link">
 	<sensor type="ray" name="head_hokuyo_sensor">
 	<pose>0 0 0 0 0 0</pose>
-	<visualize>false</visualize>
+	<visualize>true</visualize>
 	<update_rate>40</update_rate>
 	<ray>
 		<scan>
@@ -241,7 +241,7 @@
 	</ray>
 	<plugin name="gazebo_ros_head_hokuyo_controller" filename="libgazebo_ros_laser.so">
 		<topicName>/laser/scan</topicName>
-		<frameName>hokuyo_link</frameName>
+		<frameName>rplidar_link</frameName>
 	</plugin>
 	</sensor>
 </gazebo>
