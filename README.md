@@ -1,5 +1,5 @@
 # simple_robot_simulation
-This is a simple robot simulation simulating a two wheel drive mobile robot with one castor wheel in front in a simple gazebo environment. This simulation requires a proper installed ROS, gazebo and rviz.
+This is a simple robot simulation simulating a mobile robot with four driving wheels in a simple gazebo environment. This simulation requires a proper installed ROS, gazebo and rviz.
 
 This simulation package was created under following environment:
 
